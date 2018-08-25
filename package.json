@@ -1,6 +1,6 @@
 {
   "name": "gatsby-source-woocommerce",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Gatsby source plugin for WooCommerce",
   "main": "gatsby-node.js",
   "scripts": {
