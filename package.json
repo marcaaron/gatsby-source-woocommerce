@@ -9,8 +9,6 @@
   "author": "Marc Aaron Glasser",
   "license": "ISC",
   "dependencies": {
-    "node-fetch": "^2.2.0",
-    "query-string": "^6.1.0",
     "woocommerce-api": "^1.4.2"
   }
 }

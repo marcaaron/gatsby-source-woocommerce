@@ -1,10 +1,11 @@
 # TBC
 
-```
+```javascript
 plugins:[
   {
     resolve: "gatsby-source-woocommerce",
     options: {
+      // just this not http or /wp-json blah blah
       api: 'wordpress.domain',
       // true or false if using https or nah
       https: false,
