@@ -8,7 +8,7 @@ exports.sourceNodes = async (
   const { createNode } = boundActionCreators;
   delete configOptions.plugins;
 
-  const {api, https, api_keys} = configOptions;
+  const { api, https, api_keys, fields } = configOptions;
 
   // set up WooCommerce node api tool
   const WooCommerce = new WooCommerceAPI({
@@ -19,50 +19,21 @@ exports.sourceNodes = async (
     version: 'wc/v1'
   });
 
+  // Fetch Node and turn our response to JSON
   const fetchNodes = async (fieldName) => {
     const res = await WooCommerce.getAsync(fieldName);
     return JSON.parse(res.toJSON().body);
   };
 
-  try{
-    console.log('Searching for Customers...')
-    const nodes = await fetchNodes('customers');
-    nodes.forEach(n=>createNode(processNode(createNodeId, n, 'customers')));
-  }catch(e){
-    console.log(e);
+  // Loop over each field set in configOptions and process/create nodes
+  async function fetchNodesAndCreate (array) {
+    for (const field of array) {
+      const nodes = await fetchNodes(field);
+      nodes.forEach(n=>createNode(processNode(createNodeId, n, field)));
+    }
   }
-
-  try{
-    console.log('\nSearching for Orders...')
-    const nodes = await fetchNodes('orders');
-    nodes.forEach(n=>createNode(processNode(createNodeId, n, 'orders')));
-  }catch(e){
-    console.log(e);
-  }
-
-  try{
-    console.log('\nSearching for Reports...')
-    const nodes = await fetchNodes('reports');
-    nodes.forEach(n=>createNode(processNode(createNodeId, n, 'reports')));
-  }catch(e){
-    console.log(e);
-  }
-
-  try{
-    console.log('\nSearching for Products...')
-    const nodes = await fetchNodes('products');
-    nodes.forEach(n=>createNode(processNode(createNodeId, n, 'products')));
-  }catch(e){
-    console.log(e);
-  }
-
-  try{
-    console.log('\nSearching for Coupons...')
-    const nodes = await fetchNodes('coupons');
-    nodes.forEach(n=>createNode(processNode(createNodeId, n, 'coupons')));
-  }catch(e){
-    console.log(e);
-  }
-
+  
+  // Leh go...
+  await fetchNodesAndCreate(fields);
   return;
 };

@@ -16,12 +16,14 @@ plugins:[
     options: {
 	   // Base URL of Wordpress site
       api: 'wordpress.domain',
-      // true or false if using https or nah
+      // true if using https. false if nah.
       https: false,
       api_keys: {
         consumer_key: <key>,
         consumer_secret: <secret>,
-      }
+      },
+      // Array of strings with fields you'd like to create nodes for...
+      fields: ['products']
     }
   }
 ]
