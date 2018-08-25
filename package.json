@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Marc Aaron Glasser",
   "license": "ISC",
   "dependencies": {
     "node-fetch": "^2.2.0",
