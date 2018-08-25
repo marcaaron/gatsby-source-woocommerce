@@ -1,0 +1,16 @@
+{
+  "name": "gatsby-source-woocommerce",
+  "version": "0.0.1",
+  "description": "Gatsby source plugin for WooCommerce",
+  "main": "gatsby-node.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "node-fetch": "^2.2.0",
+    "query-string": "^6.1.0",
+    "woocommerce-api": "^1.4.2"
+  }
+}
