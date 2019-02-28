@@ -1,5 +1,8 @@
 const WooCommerceAPI = require('woocommerce-api');
 const { processNode } = require('./helpers');
+const endpointMap = {
+  'categories': 'products/categories'
+};
 
 exports.sourceNodes = async (
   { boundActionCreators, createNodeId },
@@ -28,7 +31,7 @@ exports.sourceNodes = async (
   // Loop over each field set in configOptions and process/create nodes
   async function fetchNodesAndCreate (array) {
     for (const field of array) {
-      const nodes = await fetchNodes(field);
+      const nodes = await fetchNodes(endpointMap[field] ? endpointMap[field] : field);
       nodes.forEach(n=>createNode(processNode(createNodeId, n, field)));
     }
   }
