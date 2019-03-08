@@ -22,6 +22,9 @@ plugins:[
         consumer_key: <key>,
         consumer_secret: <secret>,
       },
+      // Version of the woocommerce API to use
+      // OPTIONAL: defaults to 'wc/v1'
+      api_version: ['wc/v3']
       // Array of strings with fields you'd like to create nodes for...
       fields: ['products']
     }
@@ -36,3 +39,7 @@ plugins:[
 - Orders
 - Reports
 - Coupons
+
+**Note**: If following the endpoint layout from the [WooCommerce REST API docs](https://woocommerce.github.io/woocommerce-rest-api-docs/?php#introduction), all fields that do not contain a wildcard *should* be supported.
+
+For example, to get product categories: including 'products/categories' in fields will show up as allWcProductsCategories / wcProductsCategories

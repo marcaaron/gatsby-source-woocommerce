@@ -8,7 +8,7 @@ exports.sourceNodes = async (
   const { createNode } = boundActionCreators;
   delete configOptions.plugins;
 
-  const { api, https, api_keys, fields } = configOptions;
+  const { api, https, api_keys, fields, api_version } = configOptions;
 
   // set up WooCommerce node api tool
   const WooCommerce = new WooCommerceAPI({
@@ -16,7 +16,7 @@ exports.sourceNodes = async (
     consumerKey: api_keys.consumer_key,
     consumerSecret: api_keys.consumer_secret,
     wpAPI: true,
-    version: 'wc/v1'
+    version: api_version || 'wc/v1'
   });
 
   // Fetch Node and turn our response to JSON
