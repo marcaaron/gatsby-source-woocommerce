@@ -10,6 +10,7 @@ const processNode = (createNodeId, node, fieldName) => {
 
   const nodeData = Object.assign({}, node, {
     id: nodeId,
+    wordpress_id: node['id'],
     parent: null,
     children: [],
     internal: {
@@ -21,7 +22,19 @@ const processNode = (createNodeId, node, fieldName) => {
   return nodeData
 };
 
-module.exports = { processNode };
+// Turn multi part endpoints into camelCase
+// e.g. products/categories becomes productsCategories
+const normaliseFieldName = (name) => {
+  const parts = name.split('/');
+  return parts.reduce((whole, partial) => {
+    if(whole === '') {
+      return whole.concat(partial);
+    }
+    return whole.concat(partial[0].toUpperCase() + partial.slice(1));
+  }, '')
+}
+
+module.exports = { processNode, normaliseFieldName };
 
 // Helper Helpers
 function capitalize(s){

@@ -1,5 +1,5 @@
 const WooCommerceAPI = require('woocommerce-api');
-const { processNode } = require('./helpers');
+const { processNode, normaliseFieldName } = require('./helpers');
 
 exports.sourceNodes = async (
   { boundActionCreators, createNodeId },
@@ -22,14 +22,23 @@ exports.sourceNodes = async (
   // Fetch Node and turn our response to JSON
   const fetchNodes = async (fieldName) => {
     const res = await WooCommerce.getAsync(fieldName);
-    return JSON.parse(res.toJSON().body);
+    const json = res.toJSON();
+    if(json.statusCode !== 200) {
+      console.warn(`
+        \n========== WARNING FOR FIELD ${fieldName} ==========\n`);
+      console.warn(`The following error message was produced: ${json.body}`);
+      console.warn(`\n========== END WARNING ==========\n`);
+      return [];
+    }
+    return JSON.parse(json.body);
   };
 
   // Loop over each field set in configOptions and process/create nodes
   async function fetchNodesAndCreate (array) {
     for (const field of array) {
       const nodes = await fetchNodes(field);
-      nodes.forEach(n=>createNode(processNode(createNodeId, n, field)));
+      const fieldName = normaliseFieldName(field);
+      nodes.forEach(n=>createNode(processNode(createNodeId, n, fieldName)));
     }
   }
   
