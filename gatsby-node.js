@@ -8,7 +8,7 @@ exports.sourceNodes = async (
   const { createNode } = boundActionCreators;
   delete configOptions.plugins;
 
-  const { api, https, api_keys, fields, api_version } = configOptions;
+  const { api, https, api_keys, fields, api_version, per_page } = configOptions;
 
   // set up WooCommerce node api tool
   const WooCommerce = new WooCommerceAPI({
@@ -21,11 +21,16 @@ exports.sourceNodes = async (
 
   // Fetch Node and turn our response to JSON
   const fetchNodes = async (fieldName) => {
-    const res = await WooCommerce.getAsync(fieldName);
+    const endpoint = per_page 
+      ? fieldName + `?per_page=${per_page}`
+      : fieldName;
+
+    const res = await WooCommerce.getAsync(endpoint);
     const json = res.toJSON();
     if(json.statusCode !== 200) {
       console.warn(`
-        \n========== WARNING FOR FIELD ${fieldName} ==========\n`);
+        \n========== WARNING FOR FIELD ${fieldName} ==========\n`
+      );
       console.warn(`The following error message was produced: ${json.body}`);
       console.warn(`\n========== END WARNING ==========\n`);
       return [];

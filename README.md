@@ -22,11 +22,13 @@ plugins:[
         consumer_key: <key>,
         consumer_secret: <secret>,
       },
+      // Array of strings with fields you'd like to create nodes for...
+      fields: ['products'],
       // Version of the woocommerce API to use
       // OPTIONAL: defaults to 'wc/v1'
-      api_version: ['wc/v3']
-      // Array of strings with fields you'd like to create nodes for...
-      fields: ['products']
+      api_version: ['wc/v3'],
+      // OPTIONAL: How many results to retrieve
+      per_page: 100
     }
   }
 ]
