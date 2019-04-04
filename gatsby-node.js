@@ -1,5 +1,5 @@
 const WooCommerceAPI = require('woocommerce-api');
-const { processNode } = require('./helpers');
+const { processNode, normaliseFieldName } = require('./helpers');
 
 exports.sourceNodes = async (
   { boundActionCreators, createNodeId },
@@ -8,7 +8,7 @@ exports.sourceNodes = async (
   const { createNode } = boundActionCreators;
   delete configOptions.plugins;
 
-  const { api, https, api_keys, fields } = configOptions;
+  const { api, https, api_keys, fields, api_version = 'wc/v1', per_page } = configOptions;
 
   // set up WooCommerce node api tool
   const WooCommerce = new WooCommerceAPI({
@@ -16,20 +16,34 @@ exports.sourceNodes = async (
     consumerKey: api_keys.consumer_key,
     consumerSecret: api_keys.consumer_secret,
     wpAPI: true,
-    version: 'wc/v1'
+    version: api_version
   });
 
   // Fetch Node and turn our response to JSON
   const fetchNodes = async (fieldName) => {
-    const res = await WooCommerce.getAsync(fieldName);
-    return JSON.parse(res.toJSON().body);
+    const endpoint = per_page 
+      ? fieldName + `?per_page=${per_page}`
+      : fieldName;
+
+    const res = await WooCommerce.getAsync(endpoint);
+    const json = res.toJSON();
+    if(json.statusCode !== 200) {
+      console.warn(`
+        \n========== WARNING FOR FIELD ${fieldName} ==========\n`
+      );
+      console.warn(`The following error message was produced: ${json.body}`);
+      console.warn(`\n========== END WARNING ==========\n`);
+      return [];
+    }
+    return JSON.parse(json.body);
   };
 
   // Loop over each field set in configOptions and process/create nodes
   async function fetchNodesAndCreate (array) {
     for (const field of array) {
       const nodes = await fetchNodes(field);
-      nodes.forEach(n=>createNode(processNode(createNodeId, n, field)));
+      const fieldName = normaliseFieldName(field);
+      nodes.forEach(n=>createNode(processNode(createNodeId, n, fieldName)));
     }
   }
   
