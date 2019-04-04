@@ -26,7 +26,7 @@ plugins:[
       fields: ['products'],
       // Version of the woocommerce API to use
       // OPTIONAL: defaults to 'wc/v1'
-      api_version: ['wc/v3'],
+      api_version: 'wc/v3',
       // OPTIONAL: How many results to retrieve
       per_page: 100
     }
